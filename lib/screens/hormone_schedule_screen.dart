@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:your_app/services/hormone_tracker_service.dart';
+import 'package:your_app/widgets/hormone_card.dart';
+import 'package:your_app/models/hormone.dart';
+import 'package:your_app/services/notification_service.dart';
 
 class HormoneScheduleScreen extends StatefulWidget {
   @override
@@ -8,7 +11,8 @@ class HormoneScheduleScreen extends StatefulWidget {
 
 class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
   final HormoneTrackerService _hormoneTrackerService = HormoneTrackerService();
-  List<Map<String, dynamic>> _hormones = [];
+  final NotificationService _notificationService = NotificationService();
+  List<Hormone> _hormones = [];
 
   @override
   void initState() {
@@ -19,23 +23,49 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
   Future<void> _loadHormones() async {
     final hormones = await _hormoneTrackerService.getHormones();
     setState(() {
-      _hormones = hormones;
+      _hormones = hormones.map((hormone) => Hormone.fromJson(hormone)).toList();
     });
   }
 
-  Future<void> _addHormone(String name, double dosage, String schedule, String purpose) async {
-    await _hormoneTrackerService.addHormone(name, dosage, schedule, purpose);
+  Future<void> _addHormone(String name, double dosage, DateTime schedule, String purpose) async {
+    final hormone = Hormone(
+      id: 0,
+      name: name,
+      dosage: dosage,
+      schedule: schedule,
+      purpose: purpose,
+    );
+    await _hormoneTrackerService.addHormone(hormone);
     _loadHormones();
+    _scheduleNotification(hormone);
   }
 
-  Future<void> _editHormone(int id, String name, double dosage, String schedule, String purpose) async {
-    await _hormoneTrackerService.editHormone(id, name, dosage, schedule, purpose);
+  Future<void> _editHormone(int id, String name, double dosage, DateTime schedule, String purpose) async {
+    final hormone = Hormone(
+      id: id,
+      name: name,
+      dosage: dosage,
+      schedule: schedule,
+      purpose: purpose,
+    );
+    await _hormoneTrackerService.editHormone(hormone);
     _loadHormones();
+    _scheduleNotification(hormone);
   }
 
   Future<void> _deleteHormone(int id) async {
     await _hormoneTrackerService.deleteHormone(id);
     _loadHormones();
+    _notificationService.cancelNotification(id);
+  }
+
+  void _scheduleNotification(Hormone hormone) {
+    _notificationService.scheduleHormoneScheduleNotification(
+      hormone.id,
+      'Hormone Schedule',
+      'It\'s time to take your ${hormone.name} dosage.',
+      hormone.schedule,
+    );
   }
 
   void _showAddHormoneDialog() {
@@ -64,6 +94,7 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
               TextField(
                 controller: scheduleController,
                 decoration: InputDecoration(labelText: 'Schedule'),
+                keyboardType: TextInputType.datetime,
               ),
               TextField(
                 controller: purposeController,
@@ -83,7 +114,7 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
                 _addHormone(
                   nameController.text,
                   double.parse(dosageController.text),
-                  scheduleController.text,
+                  DateTime.parse(scheduleController.text),
                   purposeController.text,
                 );
                 Navigator.of(context).pop();
@@ -96,11 +127,11 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
     );
   }
 
-  void _showEditHormoneDialog(Map<String, dynamic> hormone) {
-    final nameController = TextEditingController(text: hormone['name']);
-    final dosageController = TextEditingController(text: hormone['dosage'].toString());
-    final scheduleController = TextEditingController(text: hormone['schedule']);
-    final purposeController = TextEditingController(text: hormone['purpose']);
+  void _showEditHormoneDialog(Hormone hormone) {
+    final nameController = TextEditingController(text: hormone.name);
+    final dosageController = TextEditingController(text: hormone.dosage.toString());
+    final scheduleController = TextEditingController(text: hormone.schedule.toIso8601String());
+    final purposeController = TextEditingController(text: hormone.purpose);
 
     showDialog(
       context: context,
@@ -122,6 +153,7 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
               TextField(
                 controller: scheduleController,
                 decoration: InputDecoration(labelText: 'Schedule'),
+                keyboardType: TextInputType.datetime,
               ),
               TextField(
                 controller: purposeController,
@@ -139,10 +171,10 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
             TextButton(
               onPressed: () {
                 _editHormone(
-                  hormone['id'],
+                  hormone.id,
                   nameController.text,
                   double.parse(dosageController.text),
-                  scheduleController.text,
+                  DateTime.parse(scheduleController.text),
                   purposeController.text,
                 );
                 Navigator.of(context).pop();
@@ -165,22 +197,13 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
         itemCount: _hormones.length,
         itemBuilder: (context, index) {
           final hormone = _hormones[index];
-          return ListTile(
-            title: Text(hormone['name']),
-            subtitle: Text('Dosage: ${hormone['dosage']} - Schedule: ${hormone['schedule']}'),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () => _showEditHormoneDialog(hormone),
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () => _deleteHormone(hormone['id']),
-                ),
-              ],
-            ),
+          return HormoneCard(
+            name: hormone.name,
+            dosage: hormone.dosage,
+            schedule: hormone.schedule.toIso8601String(),
+            purpose: hormone.purpose,
+            onEdit: () => _showEditHormoneDialog(hormone),
+            onDelete: () => _deleteHormone(hormone.id),
           );
         },
       ),
