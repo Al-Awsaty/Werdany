@@ -2,7 +2,7 @@ class Hormone {
   int id;
   String name;
   double dosage;
-  DateTime schedule;
+  String schedule;
   String purpose;
 
   Hormone({
@@ -18,7 +18,7 @@ class Hormone {
       id: json['id'],
       name: json['name'],
       dosage: json['dosage'],
-      schedule: DateTime.parse(json['schedule']),
+      schedule: json['schedule'],
       purpose: json['purpose'],
     );
   }
@@ -28,7 +28,7 @@ class Hormone {
       'id': id,
       'name': name,
       'dosage': dosage,
-      'schedule': schedule.toIso8601String(),
+      'schedule': schedule,
       'purpose': purpose,
     };
   }

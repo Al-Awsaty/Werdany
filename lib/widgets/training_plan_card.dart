@@ -1,45 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:your_app/models/training_plan.dart';
 import 'package:your_app/services/hormone_tracker_service.dart';
 
-class HormoneCard extends StatelessWidget {
-  final int id;
-  final String name;
-  final double dosage;
-  final String schedule;
-  final String purpose;
+class TrainingPlanCard extends StatelessWidget {
+  final TrainingPlan trainingPlan;
+  final Function(TrainingPlan) onEdit;
+  final Function(int) onDelete;
   final HormoneTrackerService hormoneTrackerService;
 
-  HormoneCard({
-    required this.id,
-    required this.name,
-    required this.dosage,
-    required this.schedule,
-    required this.purpose,
+  TrainingPlanCard({
+    required this.trainingPlan,
+    required this.onEdit,
+    required this.onDelete,
     required this.hormoneTrackerService,
   });
 
-  void _editHormone(BuildContext context) {
-    final nameController = TextEditingController(text: name);
-    final dosageController = TextEditingController(text: dosage.toString());
-    final scheduleController = TextEditingController(text: schedule);
-    final purposeController = TextEditingController(text: purpose);
+  void _editTrainingPlan(BuildContext context) {
+    final nameController = TextEditingController(text: trainingPlan.name);
+    final scheduleController = TextEditingController(text: trainingPlan.schedule);
+    final purposeController = TextEditingController(text: trainingPlan.purpose);
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Hormone'),
+          title: Text('Edit Training Plan'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(labelText: 'Name'),
-              ),
-              TextField(
-                controller: dosageController,
-                decoration: InputDecoration(labelText: 'Dosage'),
-                keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: scheduleController,
@@ -60,10 +51,9 @@ class HormoneCard extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                hormoneTrackerService.editHormone(
-                  id,
+                hormoneTrackerService.editTrainingPlan(
+                  trainingPlan.id,
                   nameController.text,
-                  double.parse(dosageController.text),
                   scheduleController.text,
                   purposeController.text,
                 );
@@ -86,24 +76,26 @@ class HormoneCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              name,
+              trainingPlan.name,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
             SizedBox(height: 8),
-            Text('Dosage: $dosage'),
+            Text('Schedule: ${trainingPlan.schedule}'),
             SizedBox(height: 8),
-            Text('Schedule: $schedule'),
-            SizedBox(height: 8),
-            Text('Purpose: $purpose'),
+            Text('Purpose: ${trainingPlan.purpose}'),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
                   icon: Icon(Icons.edit),
-                  onPressed: () => _editHormone(context),
+                  onPressed: () => _editTrainingPlan(context),
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () => onDelete(trainingPlan.id),
                 ),
               ],
             ),

@@ -86,47 +86,14 @@ class HormoneTrackerService {
     final hormones = await db.query('hormones');
     final response = await http.post(
       Uri.parse('https://api.example.com/sync'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_API_TOKEN',
-      },
+      headers: {'Content-Type': 'application/json'},
       body: json.encode(hormones),
     );
 
-    if (response.statusCode != 200) {
-      throw Exception('Failed to sync with API');
-    }
-  }
-
-  Future<void> _fetchFromApi() async {
-    final response = await http.get(
-      Uri.parse('https://api.example.com/hormones'),
-      headers: {
-        'Authorization': 'Bearer YOUR_API_TOKEN',
-      },
-    );
-
     if (response.statusCode == 200) {
-      final List<dynamic> hormones = json.decode(response.body);
-      final db = await database;
-      for (var hormone in hormones) {
-        await db.insert(
-          'hormones',
-          hormone,
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
-      }
+      print('Data synchronized successfully');
     } else {
-      throw Exception('Failed to fetch hormones from API');
-    }
-  }
-
-  Future<void> synchronize() async {
-    try {
-      await _fetchFromApi();
-      await _syncWithApi();
-    } catch (e) {
-      print('Synchronization failed: $e');
+      print('Failed to synchronize data');
     }
   }
 }

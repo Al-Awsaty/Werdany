@@ -1,47 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:your_app/services/hormone_tracker_service.dart';
-import 'package:your_app/widgets/hormone_card.dart';
+import 'package:your_app/widgets/reminder_card.dart';
 
-class HormoneScheduleScreen extends StatefulWidget {
+class NotificationCenterScreen extends StatefulWidget {
   @override
-  _HormoneScheduleScreenState createState() => _HormoneScheduleScreenState();
+  _NotificationCenterScreenState createState() => _NotificationCenterScreenState();
 }
 
-class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
+class _NotificationCenterScreenState extends State<NotificationCenterScreen> {
   final HormoneTrackerService _hormoneTrackerService = HormoneTrackerService();
-  List<Map<String, dynamic>> _hormones = [];
+  List<Map<String, dynamic>> _reminders = [];
 
   @override
   void initState() {
     super.initState();
-    _loadHormones();
+    _loadReminders();
   }
 
-  Future<void> _loadHormones() async {
-    final hormones = await _hormoneTrackerService.getHormones();
+  Future<void> _loadReminders() async {
+    final reminders = await _hormoneTrackerService.getReminders();
     setState(() {
-      _hormones = hormones;
+      _reminders = reminders;
     });
   }
 
-  Future<void> _addHormone(String name, double dosage, String schedule, String purpose) async {
-    await _hormoneTrackerService.addHormone(name, dosage, schedule, purpose);
-    _loadHormones();
+  Future<void> _addReminder(String name, String schedule, String purpose) async {
+    await _hormoneTrackerService.addReminder(name, schedule, purpose);
+    _loadReminders();
   }
 
-  Future<void> _editHormone(int id, String name, double dosage, String schedule, String purpose) async {
-    await _hormoneTrackerService.editHormone(id, name, dosage, schedule, purpose);
-    _loadHormones();
+  Future<void> _editReminder(int id, String name, String schedule, String purpose) async {
+    await _hormoneTrackerService.editReminder(id, name, schedule, purpose);
+    _loadReminders();
   }
 
-  Future<void> _deleteHormone(int id) async {
-    await _hormoneTrackerService.deleteHormone(id);
-    _loadHormones();
+  Future<void> _deleteReminder(int id) async {
+    await _hormoneTrackerService.deleteReminder(id);
+    _loadReminders();
   }
 
-  void _showAddHormoneDialog() {
+  void _showAddReminderDialog() {
     final nameController = TextEditingController();
-    final dosageController = TextEditingController();
     final scheduleController = TextEditingController();
     final purposeController = TextEditingController();
 
@@ -49,18 +48,13 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Add Hormone'),
+          title: Text('Add Reminder'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(labelText: 'Name'),
-              ),
-              TextField(
-                controller: dosageController,
-                decoration: InputDecoration(labelText: 'Dosage'),
-                keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: scheduleController,
@@ -81,9 +75,8 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
             ),
             TextButton(
               onPressed: () {
-                _addHormone(
+                _addReminder(
                   nameController.text,
-                  double.parse(dosageController.text),
                   scheduleController.text,
                   purposeController.text,
                 );
@@ -97,28 +90,22 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
     );
   }
 
-  void _showEditHormoneDialog(Map<String, dynamic> hormone) {
-    final nameController = TextEditingController(text: hormone['name']);
-    final dosageController = TextEditingController(text: hormone['dosage'].toString());
-    final scheduleController = TextEditingController(text: hormone['schedule']);
-    final purposeController = TextEditingController(text: hormone['purpose']);
+  void _showEditReminderDialog(Map<String, dynamic> reminder) {
+    final nameController = TextEditingController(text: reminder['name']);
+    final scheduleController = TextEditingController(text: reminder['schedule']);
+    final purposeController = TextEditingController(text: reminder['purpose']);
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Hormone'),
+          title: Text('Edit Reminder'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(labelText: 'Name'),
-              ),
-              TextField(
-                controller: dosageController,
-                decoration: InputDecoration(labelText: 'Dosage'),
-                keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: scheduleController,
@@ -139,10 +126,9 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
             ),
             TextButton(
               onPressed: () {
-                _editHormone(
-                  hormone['id'],
+                _editReminder(
+                  reminder['id'],
                   nameController.text,
-                  double.parse(dosageController.text),
                   scheduleController.text,
                   purposeController.text,
                 );
@@ -160,22 +146,23 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hormone Schedule'),
+        title: Text('Notification Center'),
       ),
       body: ListView.builder(
-        itemCount: _hormones.length,
+        itemCount: _reminders.length,
         itemBuilder: (context, index) {
-          final hormone = _hormones[index];
-          return HormoneCard(
-            name: hormone['name'],
-            dosage: hormone['dosage'],
-            schedule: hormone['schedule'],
-            purpose: hormone['purpose'],
+          final reminder = _reminders[index];
+          return ReminderCard(
+            id: reminder['id'],
+            name: reminder['name'],
+            schedule: reminder['schedule'],
+            purpose: reminder['purpose'],
+            hormoneTrackerService: _hormoneTrackerService,
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _showAddHormoneDialog,
+        onPressed: _showAddReminderDialog,
         child: Icon(Icons.add),
       ),
     );
