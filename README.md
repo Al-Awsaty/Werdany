@@ -1,74 +1,100 @@
-<header>
+# Werdany's BodyBuilding
 
-# Bodybuilding Trainer and Nutrition App
-
-_Enhance and expand a Bodybuilding Trainer and Nutrition App with advanced features and functionality tailored for a professional bodybuilder._
-
-</header>
-
-<!--
-  <<< Author notes: Step 2 >>>
-  Start this step by acknowledging the previous step.
-  Define terms and link to docs.github.com.
--->
-
-## Step 2: Seeing AI code suggestions in a Javascript file!
-
-_Nice work! :tada: You created a Codespace using a devcontainer file that installed Copilot!_
-
-GitHub Copilot provides suggestions for numerous languages and a wide variety of frameworks, but works especially well for Python, JavaScript, TypeScript, Ruby, Go, C# and C++. The following samples are in JavaScript, but other languages will work similarly.
-
-Let's try this out utilizing Javascript for Copilot.
-
-### :keyboard: Activity: Add a Javascript file and start writing code
-
-1. From inside the codespace in the VS Code explorer window, create a new file.
-
-> **Note**:
-> If you closed the Codespace from above, please open it back up or create a new Codespace.
-
-2. Name the file `skills.js`
-3. Verify your new file looks like:
-   ![Screen Shot 2023-03-09 at 9 21 34 AM](https://user-images.githubusercontent.com/26442605/224105906-d1beb531-b747-4c7a-85ba-a12526488422.png)
-4. In the `skills.js` file, type the following function header.
-
-   ```
-   function calculateNumbers(var1, var2)
-   ```
-
-   GitHub Copilot will automatically suggest an entire function body in grayed text. Below is an example of what you'll most likely see, but the exact suggestion may vary.
-   ![Screen Shot 2023-04-27 at 10 23 06 AM](https://user-images.githubusercontent.com/26442605/234941079-b4bf3e9d-fc70-4b20-b74c-0ee753ba344e.png)
-
-5. Press `Tab` to accept the suggestion.
-
-### :keyboard: Activity: Push code to your repository from the codespace
-
-1. Use the VS Code terminal to add the `skills.js` file to the repository:
-
-   ```
-   git add skills.js
-   ```
-
-2. Next from the VS Code terminal stage and commit the changes to the repository:
-
-   ```
-   git commit -m "Copilot first commit"
-   ```
-
-3. Finally from the VS Code terminal push to code to the repository:
-
-   ```
-   git push
-   ```
-
-**Wait about 60 seconds then refresh your repository landing page for the next step.**
-
-<footer>
+A comprehensive Flutter application designed for bodybuilders and athletes to track their performance, manage hormone dosages, plan training and nutrition, and facilitate trainee management for trainers.
 
 ---
 
-Get help: [Post in our discussion board](https://github.com/orgs/skills/discussions/categories/code-with-copilot) &bull; [Review the GitHub status page](https://www.githubstatus.com/)
+## 📋 Project Description
 
-&copy; 2023 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
+Werdany's BodyBuilding app delivers a full-featured experience for bodybuilding enthusiasts and professionals, including:
+- Hormone tracking and dosage management.
+- Personalized training and nutrition plans.
+- Competition preparation tools.
+- Progress tracking and trainee management.
 
-</footer>
+---
+
+## 🚀 Getting Started
+
+To set up and run the project locally, follow these steps:
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/sakura-source/Werdany.git
+
+	2.	Install the Required Packages:
+
+flutter pub get
+
+
+	3.	Run the Application:
+
+flutter run
+
+🏋️ Features
+	•	Hormone Tracking:
+	•	Schedule and manage hormone dosages.
+	•	Alerts and reminders for hormone timings.
+	•	Explanation of the role and benefits of each hormone.
+	•	Training & Nutrition Management:
+	•	Personalized training plans (strength, hypertrophy, cutting).
+	•	Custom nutrition plans based on user goals (weight gain, weight loss, maintenance).
+	•	Competition Preparation:
+	•	Weight and body fat tracking.
+	•	Countdown timer for competitions.
+	•	Posing tutorials and virtual analysis.
+	•	Trainee Management for Trainers:
+	•	Manage trainee profiles and goals.
+	•	Provide custom plans for each trainee.
+	•	Communicate directly with trainees via messaging.
+	•	Performance Tracking:
+	•	Track progress with photos (before & after comparisons).
+	•	Generate visual graphs for performance trends.
+
+📂 Project Structure
+
+Werdany/
+├── lib/
+│   ├── screens/              # Main Screens
+│   │   ├── hormone_schedule_screen.dart
+│   │   ├── training_screen.dart
+│   │   ├── nutrition_screen.dart
+│   │   ├── progress_photos_screen.dart
+│   ├── widgets/              # Reusable Widgets
+│   │   ├── progress_graph.dart
+│   │   ├── hormone_card.dart
+│   │   ├── photo_comparison_widget.dart
+│   ├── models/               # Data Models
+│   │   ├── hormone.dart
+│   │   ├── body_stats.dart
+│   │   ├── diet_plan.dart
+│   │   ├── trainer_profile.dart
+│   ├── services/             # Business Logic
+│   │   ├── hormone_tracker_service.dart
+│   │   ├── notification_service.dart
+│   │   ├── body_stats_service.dart
+├── .devcontainer/            # DevContainer Settings
+│   ├── devcontainer.json
+│   ├── Dockerfile
+├── README.md                 # This file
+├── pubspec.yaml              # Flutter Packages
+
+🛠️ Contributions
+
+We welcome contributions to enhance this project! To contribute:
+	1.	Open an Issue to discuss the feature or bug.
+	2.	Fork the repository and create a new branch:
+
+git checkout -b feature/new-feature
+
+
+	3.	Make your changes and create a Pull Request.
+
+🔒 License
+
+This project is licensed under the MIT License.
+
+✨ Thank You for Supporting Werdany’s BodyBuilding!
+
+Feel free to share your feedback or open Issues for improvements and suggestions!
+
