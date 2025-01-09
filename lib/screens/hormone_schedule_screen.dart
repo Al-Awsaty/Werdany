@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:your_app/services/hormone_tracker_service.dart';
-import 'package:your_app/widgets/hormone_card.dart';
 
 class HormoneScheduleScreen extends StatefulWidget {
   @override
@@ -166,11 +165,22 @@ class _HormoneScheduleScreenState extends State<HormoneScheduleScreen> {
         itemCount: _hormones.length,
         itemBuilder: (context, index) {
           final hormone = _hormones[index];
-          return HormoneCard(
-            name: hormone['name'],
-            dosage: hormone['dosage'],
-            schedule: hormone['schedule'],
-            purpose: hormone['purpose'],
+          return ListTile(
+            title: Text(hormone['name']),
+            subtitle: Text('Dosage: ${hormone['dosage']} - Schedule: ${hormone['schedule']}'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () => _showEditHormoneDialog(hormone),
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () => _deleteHormone(hormone['id']),
+                ),
+              ],
+            ),
           );
         },
       ),
