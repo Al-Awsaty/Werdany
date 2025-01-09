@@ -1,0 +1,50 @@
+{
+  "name": "Werdany's BodyBuilding Development Environment",
+  "dockerFile": "Dockerfile",
+  "context": "..",
+  "runArgs": [
+    "--privileged"
+  ],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "editor.formatOnSave": true,
+    "files.autoSave": "afterDelay",
+    "files.exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/CVS": true,
+      "**/.DS_Store": true
+    }
+  },
+  "extensions": [
+    "Dart-Code.flutter",
+    "Dart-Code.dart-code",
+    "esbenp.prettier-vscode",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "ms-azuretools.vscode-docker",
+    "eamodio.gitlens",
+    "streetsidesoftware.code-spell-checker"
+  ],
+  "forwardPorts": [
+    3000,
+    8080,
+    5000
+  ],
+  "postCreateCommand": "flutter doctor",
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+  ],
+  "containerEnv": {
+    "ANDROID_HOME": "/usr/local/android-sdk",
+    "PATH": "/usr/local/flutter/bin:/usr/local/android-sdk/platform-tools:/usr/local/android-sdk/tools/bin:${PATH}"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:1": {
+      "version": "latest"
+    }
+  }
+}
