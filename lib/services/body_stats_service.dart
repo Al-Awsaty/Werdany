@@ -19,11 +19,18 @@ class BodyStatsService {
     String path = join(await getDatabasesPath(), 'body_stats.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE body_stats(id INTEGER PRIMARY KEY, weight REAL, muscleMass REAL, fatPercentage REAL)',
+          'CREATE TABLE body_stats(id INTEGER PRIMARY KEY, weight REAL, muscleMass REAL, fatPercentage REAL, date TEXT)',
         );
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute(
+            'ALTER TABLE body_stats ADD COLUMN date TEXT',
+          );
+        }
       },
     );
   }

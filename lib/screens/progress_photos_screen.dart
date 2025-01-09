@@ -77,6 +77,39 @@ class _ProgressPhotosScreenState extends State<ProgressPhotosScreen> {
             ),
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fitness_center),
+            label: 'Body Tracking',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.restaurant),
+            label: 'Diet Plan',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.schedule),
+            label: 'Hormone Schedule',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.photo),
+            label: 'Progress Photos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Trainer Dashboard',
+          ),
+        ],
+        currentIndex: 4,
+        selectedItemColor: Colors.blue,
+        onTap: (index) {
+          // Add navigation logic here
+        },
+      ),
     );
   }
 }
