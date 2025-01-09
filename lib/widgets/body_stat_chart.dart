@@ -23,6 +23,19 @@ class BodyStatChart extends StatelessWidget {
             colors: [Colors.blue],
             barWidth: 4,
             belowBarData: BarAreaData(show: false),
+            dotData: FlDotData(show: true),
+            showingIndicators: [0, 1, 2, 3, 4, 5],
+            tooltipData: FlTooltipData(
+              tooltipBgColor: Colors.blueAccent,
+              getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                return touchedSpots.map((barSpot) {
+                  return LineTooltipItem(
+                    '${barSpot.y}',
+                    const TextStyle(color: Colors.white),
+                  );
+                }).toList();
+              },
+            ),
           ),
           LineChartBarData(
             spots: bodyStats
@@ -35,6 +48,19 @@ class BodyStatChart extends StatelessWidget {
             colors: [Colors.green],
             barWidth: 4,
             belowBarData: BarAreaData(show: false),
+            dotData: FlDotData(show: true),
+            showingIndicators: [0, 1, 2, 3, 4, 5],
+            tooltipData: FlTooltipData(
+              tooltipBgColor: Colors.greenAccent,
+              getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                return touchedSpots.map((barSpot) {
+                  return LineTooltipItem(
+                    '${barSpot.y}',
+                    const TextStyle(color: Colors.white),
+                  );
+                }).toList();
+              },
+            ),
           ),
           LineChartBarData(
             spots: bodyStats
@@ -47,6 +73,19 @@ class BodyStatChart extends StatelessWidget {
             colors: [Colors.red],
             barWidth: 4,
             belowBarData: BarAreaData(show: false),
+            dotData: FlDotData(show: true),
+            showingIndicators: [0, 1, 2, 3, 4, 5],
+            tooltipData: FlTooltipData(
+              tooltipBgColor: Colors.redAccent,
+              getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                return touchedSpots.map((barSpot) {
+                  return LineTooltipItem(
+                    '${barSpot.y}',
+                    const TextStyle(color: Colors.white),
+                  );
+                }).toList();
+              },
+            ),
           ),
         ],
         titlesData: FlTitlesData(
@@ -55,6 +94,18 @@ class BodyStatChart extends StatelessWidget {
         ),
         borderData: FlBorderData(show: true),
         gridData: FlGridData(show: true),
+        lineTouchData: LineTouchData(
+          touchTooltipData: LineTouchTooltipData(
+            tooltipBgColor: Colors.blueGrey,
+          ),
+          touchCallback: (LineTouchResponse touchResponse) {},
+          handleBuiltInTouches: true,
+        ),
+        panAndZoomData: PanAndZoomData(
+          enabled: true,
+          maxScale: 2,
+          minScale: 0.5,
+        ),
       ),
     );
   }
